@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ResumeScore AI — Career Intelligence Platform</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,800,900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07070f;--surface:#0f0f1a;--border:#23233a;
+  --accent:#7c6aff;--accent2:#00d4aa;
+  --text:#eaeaf5;--text2:#8080a8;--text3:#55556e;
+  --green:#00d4aa;--red:#ff6060;--yellow:#ffc832;--orange:#ff9a3c;--blue:#62b6ff;
+  --r:16px;
+  --font:'Satoshi',system-ui,sans-serif;
+}
+html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(124,106,255,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,255,.032) 1px,transparent 1px);background-size:52px 52px;pointer-events:none;z-index:0}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 40px;background:rgba(7,7,15,.88);backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo svg{width:26px;height:26px;flex-shrink:0}
+.logo-name{font-size:18px;font-weight:800;letter-spacing:-.4px}
+.logo-ai{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.gh-btn{display:flex;align-items:center;gap:7px;color:var(--text2);text-decoration:none;font-size:13px;font-weight:600;border:1px solid var(--border);padding:8px 18px;border-radius:99px;transition:all .2s}
+.gh-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(124,106,255,.07)}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:72px 24px 40px;position:relative;z-index:1}
+.hero-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(124,106,255,.1);border:1px solid rgba(124,106,255,.28);color:var(--accent);border-radius:99px;padding:6px 18px;font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:22px}
+h1{font-size:clamp(38px,5.5vw,72px);font-weight:900;line-height:1.04;letter-spacing:-2.5px;margin-bottom:18px}
+.g{background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16px;color:var(--text2);max-width:580px;margin:0 auto;line-height:1.75;font-weight:400}
+
+/* ── TABS ── */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:900px;margin:36px auto 0;padding:0 24px;position:relative;z-index:1}
+.tab{padding:11px 10px;border-radius:12px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--font);white-space:nowrap;text-align:center}
+.tab.on{background:rgba(124,106,255,.16);border-color:rgba(124,106,255,.42);color:var(--accent)}
+.tab:hover:not(.on){border-color:rgba(124,106,255,.22);color:var(--text)}
+@media(min-width:680px){.tabs{grid-template-columns:repeat(6,1fr)}}
+
+/* ── WRAP & PANELS ── */
+.wrap{max-width:900px;margin:0 auto;padding:24px 24px 0;position:relative;z-index:1}
+.panel{display:none}.panel.on{display:block}
+
+/* ── INPUT CARD ── */
+.ic{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.4),0 0 80px rgba(124,106,255,.05);margin-bottom:14px}
+.ic-top{display:flex;justify-content:space-between;align-items:center;padding:13px 20px;border-bottom:1px solid var(--border)}
+.ic-lbl{font-size:13px;font-weight:600;color:var(--text2);display:flex;align-items:center;gap:7px}
+.samp{background:rgba(124,106,255,.13);border:1px solid rgba(124,106,255,.28);color:var(--accent);padding:6px 15px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .2s}
+.samp:hover{background:rgba(124,106,255,.24)}
+textarea{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:14px;line-height:1.78;padding:18px 20px;resize:vertical;min-height:220px}
+textarea.short{min-height:150px}
+textarea::placeholder{color:var(--text3)}
+.ic-bot{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-top:1px solid var(--border);background:rgba(255,255,255,.01)}
+.cc{font-size:12px;color:var(--text2)}
+.abtn{background:linear-gradient(135deg,#7c6aff,#5645d4);border:none;color:#fff;padding:12px 30px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font);box-shadow:0 4px 20px rgba(124,106,255,.4);transition:all .3s}
+.abtn:hover{transform:translateY(-2px);box-shadow:0 7px 28px rgba(124,106,255,.52)}
+.abtn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+/* Role select */
+.role-sel-wrap{margin-bottom:14px}
+.role-sel-wrap label{display:block;font-size:13px;font-weight:600;color:var(--text2);margin-bottom:9px}
+select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:11px 16px;border-radius:12px;font-size:14px;font-family:var(--font);outline:none;cursor:pointer}
+
+/* ── RESULTS ── */
+.res{display:none;margin-top:0}
+
+/* ── SCORE CARD ── */
+.sc{background:linear-gradient(140deg,#160d30 0%,#0b1728 55%,#071918 100%);border:1px solid rgba(124,106,255,.32);border-radius:22px;padding:36px 44px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:0 14px 56px rgba(0,0,0,.5),0 0 100px rgba(124,106,255,.09)}
+.sc::before{content:'';position:absolute;top:-70px;right:-70px;width:360px;height:360px;background:radial-gradient(circle,rgba(124,106,255,.17),transparent 65%);pointer-events:none}
+.sc::after{content:'';position:absolute;bottom:-50px;left:-50px;width:260px;height:260px;background:radial-gradient(circle,rgba(0,212,170,.1),transparent 65%);pointer-events:none}
+.sc-in{display:flex;gap:44px;align-items:center;flex-wrap:wrap;position:relative;z-index:1}
+
+/* Ring */
+.rw{flex-shrink:0}
+.rsvg{width:140px;height:140px;transform:rotate(-90deg)}
+.rbg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:9}
+.rfg{fill:none;stroke-width:9;stroke-linecap:round;stroke:url(#rg);stroke-dasharray:345;stroke-dashoffset:345;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)}
+.rn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:36px;font-weight:900;letter-spacing:-2px}
+.rring{position:relative;width:140px;height:140px}
+.rl{text-align:center;font-size:11px;color:var(--text2);font-weight:500;margin-top:5px}
+.rgr{text-align:center;font-size:28px;font-weight:900;margin-top:2px}
+
+/* Right */
+.scr{flex:1;min-width:250px}
+.sey{font-size:10px;text-transform:uppercase;letter-spacing:2px;color:var(--text2);margin-bottom:5px}
+.sn{font-size:21px;font-weight:800;margin-bottom:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.subrs{display:flex;flex-direction:column;gap:9px;margin-bottom:18px}
+.subrow{display:flex;align-items:center;gap:10px}
+.slbl{font-size:12px;color:var(--text2);width:124px;font-weight:500}
+.strk{flex:1;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.sbar{height:100%;border-radius:3px;transition:width 1.3s ease;width:0%}
+.sval{font-size:12px;font-weight:700;width:26px;text-align:right}
+.bdgs{display:flex;flex-wrap:wrap;gap:6px}
+.badge{padding:3px 11px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.3px;border:1px solid}
+.bg{background:rgba(0,212,170,.11);border-color:rgba(0,212,170,.32);color:var(--green)}
+.br{background:rgba(255,96,96,.11);border-color:rgba(255,96,96,.32);color:var(--red)}
+.by{background:rgba(255,200,50,.11);border-color:rgba(255,200,50,.32);color:var(--yellow)}
+.sca{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap;position:relative;z-index:1}
+.bp{background:linear-gradient(135deg,var(--accent),#5645d4);border:none;color:#fff;padding:11px 22px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);box-shadow:0 4px 16px rgba(124,106,255,.3);transition:all .2s}
+.bp:hover{transform:translateY(-1px)}
+.bs{background:transparent;border:1px solid var(--border);color:var(--text2);padding:11px 22px;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s}
+.bs:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── GRID ── */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:80px}
+.ac{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+.ac.wide{grid-column:1/-1}
+.ac h3{font-size:13px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:7px}
+
+/* Section list */
+.si{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.si:last-child{border-bottom:none}
+.si .ico{font-size:14px;width:20px}
+.si .lbl{font-size:13px;flex:1;font-weight:500}
+.stag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px}
+.tf{background:rgba(0,212,170,.11);color:var(--green)}
+.tm{background:rgba(255,96,96,.11);color:var(--red)}
+
+/* Tag clouds */
+.tc{display:flex;flex-wrap:wrap;gap:7px}
+.kt{padding:3px 12px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(124,106,255,.11);border:1px solid rgba(124,106,255,.23);color:var(--accent)}
+.vt{padding:3px 12px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(0,212,170,.09);border:1px solid rgba(0,212,170,.23);color:var(--accent2)}
+.em{font-size:13px;color:var(--text2);opacity:.7}
+
+/* Suggestions */
+.sug{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.sug:last-child{border-bottom:none}
+.sug .ico{font-size:17px;flex-shrink:0;margin-top:1px}
+.sug strong{font-size:13px;font-weight:700;display:block;margin-bottom:3px}
+.sug span{font-size:13px;color:var(--text2);line-height:1.65}
+.ach{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:var(--text2);line-height:1.6}
+.ach:last-child{border-bottom:none}
+
+/* ── JD MATCHER ── */
+.jdr{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:20px}
+.mh{display:flex;align-items:center;gap:26px;margin-bottom:26px;flex-wrap:wrap}
+.mc{position:relative;width:100px;height:100px;flex-shrink:0}
+.mcsvg{width:100px;height:100px;transform:rotate(-90deg)}
+.mcbg{fill:none;stroke:rgba(255,255,255,.06);stroke-width:8}
+.mcfg{fill:none;stroke-width:8;stroke-linecap:round;stroke:url(#mg);stroke-dasharray:251;stroke-dashoffset:251;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
+.mcn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;font-weight:900}
+.mi h2{font-size:20px;font-weight:800;margin-bottom:5px}
+.mi p{font-size:14px;color:var(--text2);line-height:1.65}
+.ks h4{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.ks{margin-bottom:18px}
+.kh{padding:3px 12px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.28);color:var(--green);display:inline-flex;margin:3px}
+.km{padding:3px 12px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(255,96,96,.09);border:1px solid rgba(255,96,96,.28);color:var(--red);display:inline-flex;margin:3px}
+.mb-wrap{margin-bottom:20px}
+.mb-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}
+.mb-track{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.mb-fill{height:100%;border-radius:4px;transition:width 1.3s ease;width:0%}
+
+/* ── BENCHMARK ── */
+.bnr{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:20px}
+.bnh h2{font-size:20px;font-weight:800;margin-bottom:6px}
+.bnh p{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:22px}
+.bng{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:22px}
+.bnc{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center}
+.bnv{font-size:28px;font-weight:900;margin-bottom:3px}
+.bnl{font-size:12px;color:var(--text2);font-weight:500}
+.pb{margin-top:4px}
+.pb-row{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px}
+.pb-track{height:9px;background:rgba(255,255,255,.05);border-radius:5px;overflow:hidden}
+.pb-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1.4s ease;width:0%}
+.pb-txt{text-align:center;margin-top:10px;font-size:13px;color:var(--text2)}
+
+/* ── TONE ── */
+.tnr{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:20px}
+.tnh{display:flex;gap:24px;align-items:center;margin-bottom:22px;flex-wrap:wrap}
+.tng{text-align:center}
+.tnv{font-size:44px;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tnl{font-size:11px;color:var(--text2);margin-top:2px}
+.tni h2{font-size:20px;font-weight:800;margin-bottom:5px}
+.tni p{font-size:14px;color:var(--text2);line-height:1.65;max-width:460px}
+.ts h4{font-size:13px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.ts{margin-bottom:18px}
+.wi{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);flex-wrap:wrap}
+.wi:last-child{border-bottom:none}
+.wo{font-size:13px;color:var(--red);flex:1;min-width:160px}
+.wa{font-size:16px;opacity:.4;align-self:center;flex-shrink:0}
+.wb{font-size:13px;color:var(--green);flex:1;min-width:160px}
+
+/* ── LINKEDIN HEADLINES ── */
+.lir{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:80px}
+.lih h2{font-size:20px;font-weight:800;margin-bottom:6px}
+.lih p{font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:22px}
+.hl{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:14px;margin-bottom:9px;transition:border-color .2s}
+.hl:hover{border-color:rgba(124,106,255,.28)}
+.hl-rank{font-size:18px;flex-shrink:0;margin-top:1px}
+.hl-text{flex:1;font-size:14px;font-weight:600;line-height:1.55;color:var(--text)}
+.hl-tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;flex-shrink:0;border:1px solid;align-self:flex-start;margin-top:2px}
+.ht1{background:rgba(0,212,170,.1);color:var(--green);border-color:rgba(0,212,170,.28)}
+.ht2{background:rgba(124,106,255,.1);color:var(--accent);border-color:rgba(124,106,255,.28)}
+.ht3{background:rgba(255,200,50,.1);color:var(--yellow);border-color:rgba(255,200,50,.28)}
+.cp{background:transparent;border:1px solid var(--border);color:var(--text2);padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);transition:all .2s;flex-shrink:0;align-self:flex-start;margin-top:2px}
+.cp:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:36px 20px;border-top:1px solid var(--border);color:var(--text2);font-size:13px;position:relative;z-index:1}
+footer a{color:var(--accent);text-decoration:none}
+footer a:hover{text-decoration:underline}
+.fsub{font-size:11px;margin-top:7px;opacity:.5}
+
+/* ── RESPONSIVE ── */
+@media(max-width:680px){
+  header{padding:12px 16px}
+  .hero{padding:56px 16px 32px}
+  .sc-in{flex-direction:column;text-align:center}
+  .scr{min-width:unset;width:100%}
+  .slbl{width:100px}
+  .grid{grid-template-columns:1fr}
+  .ac.wide{grid-column:1}
+  .sc{padding:24px 18px}
+  .tabs{padding:0 16px}
+  h1{letter-spacing:-1.5px}
+}
+
+/* ── LIGHT MODE ── */
+body.light{
+  --bg:#f0f2f8;--surface:#ffffff;--border:#dde1f0;
+  --text:#0e0e1a;--text2:#4a4a6a;--text3:#9090b0;
+}
+body.light header{background:rgba(240,242,248,.92)}
+body.light .sc{background:linear-gradient(140deg,#ede8ff 0%,#e8f0ff 55%,#e8f8f5 100%)}
+body.light .sc::before{background:radial-gradient(circle,rgba(124,106,255,.13),transparent 65%)}
+body.light .sc::after{background:radial-gradient(circle,rgba(0,212,170,.08),transparent 65%)}
+body.light .tab{background:#fff;border-color:#dde1f0}
+body.light .tab.on{background:rgba(124,106,255,.12)}
+body.light textarea{color:#0e0e1a}
+body.light .hl{background:rgba(0,0,0,.03)}
+body.light body::before{background-image:linear-gradient(rgba(124,106,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,255,.04) 1px,transparent 1px)}
+body.light .ic-bot{background:rgba(0,0,0,.02)}
+body.light select{background:#fff;color:#0e0e1a}
+body.light footer{background:transparent}
+
+/* Toggle button */
+.theme-btn{
+  background:rgba(255,255,255,.08);border:1px solid var(--border);
+  color:var(--text2);width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;transition:all .2s;flex-shrink:0;
+  margin-left:10px;
+}
+.theme-btn:hover{border-color:var(--accent);background:rgba(124,106,255,.12)}
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0">
+  <defs>
+    <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#7c6aff"/><stop offset="100%" stop-color="#00d4aa"/>
+    </linearGradient>
+    <linearGradient id="mg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffc832"/><stop offset="100%" stop-color="#ff9a3c"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 26 26" fill="none" aria-label="ResumeScore AI Logo">
+      <rect x="2" y="2" width="22" height="22" rx="6" stroke="url(#rg)" stroke-width="2"/>
+      <path d="M7 9h12M7 13h8M7 17h5" stroke="#7c6aff" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="20" cy="17" r="3" fill="#00d4aa"/>
+    </svg>
+    <span class="logo-name">ResumeScore <span class="logo-ai">AI</span></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
+    <a href="https://github.com/aslam-prog" target="_blank" rel="noopener noreferrer" class="gh-btn">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+      View GitHub Profile
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-pill">⚡ Free · No Login · Instant Results · 100% Browser-Based</div>
+  <h1>Your Resume.<br/><span class="g">Fully Decoded.</span></h1>
+  <p class="hero-sub">Advanced resume intelligence in your browser. Analyze ATS readiness, match any job description, benchmark your profile, improve your tone, rewrite your summary, and generate powerful LinkedIn headlines — all free, private, and 100% browser-based.</p>
+</div>
+
+<!-- TABS -->
+<div style="display:flex;justify-content:center;gap:40px;flex-wrap:wrap;margin:28px 24px 0;position:relative;z-index:1">
+  <div style="text-align:center">
+    <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,#7c6aff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent" id="ctr-tools">6</div>
+    <div style="font-size:11px;color:var(--text2);font-weight:500;margin-top:2px">Free Tools</div>
+  </div>
+  <div style="text-align:center">
+    <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,#ffc832,#ff9a3c);-webkit-background-clip:text;-webkit-text-fill-color:transparent">100%</div>
+    <div style="font-size:11px;color:var(--text2);font-weight:500;margin-top:2px">Browser-Based</div>
+  </div>
+  <div style="text-align:center">
+    <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,#ff6060,#ff9a3c);-webkit-background-clip:text;-webkit-text-fill-color:transparent">0</div>
+    <div style="font-size:11px;color:var(--text2);font-weight:500;margin-top:2px">No API Keys Required</div>
+  </div>
+  <div style="text-align:center">
+    <div style="font-size:28px;font-weight:900;background:linear-gradient(135deg,#00d4aa,#62b6ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent" id="ctr-score">0</div>
+    <div style="font-size:11px;color:var(--text2);font-weight:500;margin-top:2px">Resumes Scored</div>
+  </div>
+</div>
+
+
+<div style="max-width:640px;margin:18px auto 0;padding:0 24px;position:relative;z-index:1">
+  <div style="background:rgba(124,106,255,.07);border:1px solid rgba(124,106,255,.2);border-radius:14px;padding:14px 20px;display:flex;align-items:flex-start;gap:12px">
+    <span style="font-size:18px;flex-shrink:0">💡</span>
+    <div>
+      <div style="font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent);font-weight:700;margin-bottom:4px">Resume Tip of the Day</div>
+      <div id="tip-txt" style="font-size:13px;color:var(--text2);line-height:1.65"></div>
+    </div>
+    <button onclick="nextTip()" style="background:transparent;border:none;color:var(--text2);cursor:pointer;font-size:16px;flex-shrink:0;padding:0;margin-top:1px" title="Next tip">↻</button>
+  </div>
+</div>
+
+<div class="tabs" id="tabs">
+  <button class="tab on" onclick="sw('score',this)">⚡ Resume Score</button>
+  <button class="tab" onclick="sw('jd',this)">🎯 JD Matcher</button>
+  <button class="tab" onclick="sw('bench',this)">📊 Benchmark</button>
+  <button class="tab" onclick="sw('tone',this)">🎙️ Tone Analyzer</button>
+  <button class="tab" onclick="sw('li',this)">💼 LinkedIn Headlines</button>
+  <button class="tab" onclick="sw('rewrite',this)">✍️ Summary Rewriter</button>
+</div>
+
+<!-- PANELS -->
+<div class="wrap">
+
+  <!-- SCORE -->
+  <div class="panel on" id="panel-score">
+    <div class="ic">
+      <div class="ic-top"><div class="ic-lbl">📄 Paste Your Resume</div><button class="samp" onclick="ls('score')">Load Sample</button></div>
+      <textarea id="t-score" placeholder="Paste your complete resume here...&#10;&#10;Include: Contact Info, Summary, Skills, Experience, Projects, Education, Certifications"></textarea>
+      <div class="ic-bot"><span class="cc" id="cc-score">0 characters</span><button class="abtn" onclick="rScore(event)">⚡ Analyze Resume</button></div>
+    </div>
+    <div class="res" id="res-score">
+      <div class="sc">
+        <div class="sc-in">
+          <div>
+            <div class="rring">
+              <svg class="rsvg" viewBox="0 0 120 120"><circle class="rbg" cx="60" cy="60" r="55"/><circle class="rfg" id="rf" cx="60" cy="60" r="55"/></svg>
+              <div class="rn" id="snum">0</div>
+            </div>
+            <div class="rl">Overall Score</div>
+            <div class="rgr" id="sgr">—</div>
+          </div>
+          <div class="scr">
+            <div class="sey">Career Report Card</div>
+            <div class="sn" id="sname">—</div>
+            <div class="subrs" id="sbars"></div>
+            <div class="bdgs" id="sbdgs"></div>
+          </div>
+        </div>
+        <div class="sca">
+          <button class="bp" onclick="exp()">📸 Export Score Card</button>
+          <button class="bs" onclick="rst()">🔄 Analyze Another</button>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="ac"><h3>📋 Section Checklist</h3><div id="secList"></div></div>
+        <div class="ac"><h3>🔑 Keywords Detected</h3><div id="kwList"></div></div>
+        <div class="ac wide"><h3>💡 Suggestions to Boost Your Score</h3><div id="sugList"></div></div>
+        <div class="ac"><h3>💪 Impact Verbs Found</h3><div id="vbList"></div></div>
+        <div class="ac"><h3>📊 Quantified Achievements</h3><div id="acList"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JD MATCHER -->
+  <div class="panel" id="panel-jd">
+    <div class="ic">
+      <div class="ic-top"><div class="ic-lbl">📄 Paste Your Resume</div><button class="samp" onclick="ls('jd-r')">Load Sample</button></div>
+      <textarea id="t-jd-r" class="short" placeholder="Paste your resume here..."></textarea>
+      <div class="ic-bot"><span class="cc" id="cc-jd-r">0 characters</span></div>
+    </div>
+    <div class="ic">
+      <div class="ic-top"><div class="ic-lbl">🎯 Job Description</div><button class="samp" onclick="ls('jd-j')">Load Sample JD</button></div>
+      <textarea id="t-jd-j" class="short" placeholder="Paste the target job description here..."></textarea>
+      <div class="ic-bot"><span class="cc" id="cc-jd-j">0 characters</span><button class="abtn" onclick="rJD(event)">🎯 Match Now</button></div>
+    </div>
+    <div class="res" id="res-jd">
+      <div class="jdr">
+        <div class="mh">
+          <div class="mc">
+            <svg class="mcsvg" viewBox="0 0 90 90"><circle class="mcbg" cx="45" cy="45" r="40"/><circle class="mcfg" id="mcf" cx="45" cy="45" r="40"/></svg>
+            <div class="mcn" id="mnum">0%</div>
+          </div>
+          <div class="mi"><h2 id="mt">—</h2><p id="md">—</p></div>
+        </div>
+        <div id="mbars"></div>
+        <div class="ks"><h4>✅ Keywords You Have</h4><div id="kw-h"></div></div>
+        <div class="ks"><h4>❌ Missing Keywords to Add</h4><div id="kw-m"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BENCHMARK -->
+  <div class="panel" id="panel-bench">
+    <div class="ic">
+      <div class="ic-top"><div class="ic-lbl">📄 Paste Your Resume</div><button class="samp" onclick="ls('bench')">Load Sample</button></div>
+      <textarea id="t-bench" class="short" placeholder="Paste your resume here..."></textarea>
+      <div class="ic-bot"><span class="cc" id="cc-bench">0 characters</span></div>
+    </div>
+    <div class="role-sel-wrap">
+      <label>Select Your Role</label>
+      <select id="b-role">
+        <option value="it">IT Administrator / Systems Engineer</option>
+        <option value="mdm" selected>MDM / Endpoint Management Engineer</option>
+        <option value="swe">Software Engineer / Developer</option>
+        <option value="devops">DevOps / Cloud Engineer</option>
+        <option value="cyber">Cybersecurity Engineer</option>
+        <option value="network">Network Engineer</option>
+        <option value="da">Data Analyst</option>
+        <option value="design">UI/UX Designer</option>
+        <option value="ba">Business Analyst</option>
+        <option value="pm">Product Manager</option>
+        <option value="pjm">Project Manager</option>
+        <option value="general">General Professional</option>
+      </select>
+    </div>
+    <div style="text-align:right;margin-bottom:6px"><button class="abtn" onclick="rBench(event)">📊 Benchmark Me</button></div>
+    <div class="res" id="res-bench">
+      <div class="bnr">
+        <div class="bnh"><h2 id="bn-t">—</h2><p id="bn-d">—</p></div>
+        <div class="bng" id="bn-cards"></div>
+        <div class="pb">
+          <div class="pb-row"><span>0th</span><span>25th</span><span>50th</span><span>75th</span><span>100th</span></div>
+          <div class="pb-track"><div class="pb-fill" id="pbf"></div></div>
+          <div class="pb-txt" id="pb-txt">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TONE -->
+  <div class="panel" id="panel-tone">
+    <div class="ic">
+      <div class="ic-top"><div class="ic-lbl">📄 Paste Your Resume</div><button class="samp" onclick="ls('tone')">Load Sample</button></div>
+      <textarea id="t-tone" placeholder="Paste your resume here..."></textarea>
+      <div class="ic-bot"><span class="cc" id="cc-tone">0 characters</span><button class="abtn" onclick="rTone(event)">🎙️ Analyze Tone</button></div>
+    </div>
+    <div class="res" id="res-tone">
+      <div class="tnr">
+        <div class="tnh">
+          <div class="tng"><div class="tnv" id="tconf">0</div><div class="tnl">Confidence Score</div></div>
+          <div class="tni"><h2 id="tn-t">—</h2><p id="tn-d">—</p></div>
+        </div>
+        <div class="ts"><h4>❌ Weak Phrases → Stronger Alternatives</h4><div id="wl"></div></div>
+        <div class="ts"><h4>✅ Strong Phrases Found</h4><div class="tc" id="sl"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINKEDIN -->
+  <div class="panel" id="panel-li">
+    <div class="ic">
+      <div class="ic-top"><div class="ic-lbl">📄 Paste Your Resume</div><button class="samp" onclick="ls('li')">Load Sample</button></div>
+      <textarea id="t-li" class="short" placeholder="Paste your resume here..."></textarea>
+      <div class="ic-bot"><span class="cc" id="cc-li">0 characters</span><button class="abtn" onclick="rLI(event)">💼 Generate Headlines</button></div>
+    </div>
+    <div class="res" id="res-li">
+      <div class="lir">
+        <div class="lih"><h2>Your 5 LinkedIn Headlines</h2><p>Ranked by engagement potential. Copy your favorite headline and update your LinkedIn profile in seconds.</p></div>
+        <div id="hls"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SUMMARY REWRITER -->
+  <div class="panel" id="panel-rewrite">
+    <div class="ic">
+      <div class="ic-top"><div class="ic-lbl">📄 Paste Your Resume (or just your Summary section)</div><button class="samp" onclick="ls('rewrite')">Load Sample</button></div>
+      <textarea id="t-rewrite" placeholder="Paste your full resume or just your summary paragraph here...&#10;&#10;The rewriter will detect your role, skills, and experience to generate stronger summary versions."></textarea>
+      <div class="ic-bot"><span class="cc" id="cc-rewrite">0 characters</span><button class="abtn" onclick="rRewrite(event)">✍️ Rewrite My Summary</button></div>
+    </div>
+    <div class="res" id="res-rewrite">
+      <div class="lir" style="margin-bottom:20px">
+        <div class="lih">
+          <h2>3 Rewritten Summary Versions</h2>
+          <p>Each version uses a different tone — choose the one that fits your target role best. Click Copy to use instantly.</p>
+        </div>
+        <div id="rwl"></div>
+      </div>
+      <div class="ac wide" style="margin-bottom:80px">
+        <h3>🔍 What Was Improved</h3>
+        <div id="rwi"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <p>ResumeScore AI | Built with ❤️ by <strong>Mohammed Aslam</strong></p>
+  <p style="margin-top:12px;display:flex;justify-content:center;align-items:center;gap:22px;flex-wrap:wrap;font-size:13px">
+    <a href="https://github.com/aslam-prog" target="_blank" rel="noopener noreferrer">👤 aslam-prog</a>
+    <a href="mailto:uniquehubs@gmail.com">✉️ uniquehubs@gmail.com</a>
+    <a href="https://linkedin.com/in/md-aslam-aa903312" target="_blank" rel="noopener noreferrer">🔗 LinkedIn</a>
+    <a href="https://aslam-prog.github.io/gitdna/gitdna.html" target="_blank" rel="noopener noreferrer">🌟 GitDNA</a>
+    <a href="https://github.com/aslam-prog/ResumeScore-AI" target="_blank" rel="noopener noreferrer">⭐ Open Source on GitHub</a>
+  </p>
+  <p class="fsub">© 2026 Mohammed Aslam · MIT License · Free to use forever · Your data never leaves your browser.</p>
+</footer>
+
+<script>
+// ── DATA ──
+const SR=`Mohammed Aslam
+Hyderabad, India | uniquehubs@gmail.com | linkedin.com/in/md-aslam-aa903312 | github.com/aslam-prog
+
+SUMMARY
+Results-driven Senior MDM Engineer with 20+ years of experience managing large-scale enterprise endpoint environments using Microsoft Intune and SCCM. Successfully managing 10,000+ endpoints globally at Unisys. Expert in device lifecycle management, automation, compliance, and IT infrastructure. Proven track record of reducing operational overhead and delivering scalable MDM solutions for global organizations.
+
+SKILLS
+Microsoft Intune, SCCM, PowerShell, Python, JavaScript, HTML/CSS, Azure, Windows Server, Git, GitHub, REST APIs, Automation, Active Directory, Endpoint Security, Application Packaging, MDM, Mobile Device Management, Compliance Management, Azure AD
+
+EXPERIENCE
+Senior MDM Engineer | Unisys | 2014 – Present
+• Managing 10,000+ endpoints across global business units using Microsoft Intune and SCCM.
+• Automated endpoint health checks and compliance reporting using PowerShell, reducing manual effort by 60%.
+• Led SCCM to Intune cloud migration initiative, completed ahead of schedule with zero downtime.
+• Built internal reporting dashboards that improved visibility and reduced reporting time by 40%.
+• Reduced application deployment failures by 35% through standardized Intune packaging workflows.
+• Led automation initiatives saving 12+ hours per week for the global IT support team.
+• Maintained endpoint security compliance across 10,000+ devices in a zero-trust environment.
+
+PROJECTS
+GitDNA – GitHub Intelligence Platform with DNA Score, Developer Report Card, and Head-to-Head comparison.
+ResumeScore AI – Free browser-based resume analyzer with ATS scoring, JD matching, and keyword analysis.
+
+EDUCATION
+Master of Computer Applications (MCA)
+
+CERTIFICATIONS
+Microsoft Certified: Azure AI Fundamentals
+Microsoft Certified Endpoint Administrator Associate
+ITIL Foundation
+MCSA (Microsoft Certified Solutions Associate)
+Generative AI Foundation
+CommScope Data Center Certification`;
+
+const JD_SAMPLE=`We are looking for a Senior IT Systems Administrator / Endpoint Engineer.
+
+Requirements:
+- 10+ years experience with Microsoft Intune and SCCM/Configuration Manager
+- Expert PowerShell scripting and automation skills
+- Deep knowledge of Azure Active Directory and cloud management
+- Windows Server administration and deployment experience
+- Python or other scripting language proficiency
+- REST API integration experience
+- Endpoint security and compliance management
+- Application packaging expertise
+- Strong troubleshooting and documentation skills
+- Microsoft Endpoint Administrator certification preferred`;
+
+const BD={
+  it:{avg:68,top:84,bottom:40,kw:['intune','sccm','powershell','azure','windows server','active directory','python','automation','troubleshooting','security','endpoint','application packaging']},
+  mdm:{avg:70,top:86,bottom:42,kw:['intune','sccm','mdm','endpoint','powershell','azure ad','active directory','compliance','autopilot','application packaging','windows','mobile device management']},
+  swe:{avg:72,top:88,bottom:44,kw:['python','javascript','react','node','aws','docker','sql','git','api','algorithms','microservices']},
+  devops:{avg:71,top:87,bottom:43,kw:['docker','kubernetes','ci/cd','terraform','aws','azure','jenkins','linux','ansible','monitoring','devops']},
+  cyber:{avg:73,top:89,bottom:45,kw:['siem','soc','firewall','vulnerability','penetration testing','iso 27001','incident response','zero trust','nist','threat intelligence','endpoint security','compliance']},
+  network:{avg:67,top:83,bottom:39,kw:['cisco','routing','switching','bgp','ospf','firewall','vpn','network security','tcp/ip','sdwan','lan','wan','network monitoring']},
+  da:{avg:69,top:85,bottom:41,kw:['sql','python','tableau','power bi','excel','statistics','data visualization','machine learning','etl','dashboard']},
+  design:{avg:67,top:83,bottom:38,kw:['figma','ux','ui','wireframe','prototyping','user research','accessibility','design system','sketch','adobe xd']},
+  ba:{avg:68,top:84,bottom:40,kw:['requirements','stakeholder','process mapping','gap analysis','use cases','bpmn','agile','user stories','documentation','business process','jira','confluence']},
+  pm:{avg:70,top:86,bottom:42,kw:['roadmap','stakeholder','agile','scrum','kpi','product strategy','user research','prioritization','metrics','okr']},
+  pjm:{avg:69,top:85,bottom:41,kw:['pmp','agile','scrum','risk management','project planning','budget','milestones','stakeholder','ms project','jira','delivery','resource management']},
+  general:{avg:65,top:82,bottom:38,kw:['communication','leadership','project management','teamwork','problem solving','analytical','presentation','strategy','reporting']}
+};
+
+const TW=[
+  {w:'was responsible for',s:'led / owned / managed'},
+  {w:'helped with',s:'contributed to / delivered'},
+  {w:'assisted in',s:'supported / executed'},
+  {w:'worked on',s:'built / developed / engineered'},
+  {w:'participated in',s:'drove / spearheaded'},
+  {w:'involved in',s:'led / architected'},
+  {w:'responsible for',s:'owned / managed / led'},
+  {w:'helped to',s:'enabled / delivered'},
+  {w:'familiar with',s:'proficient in / skilled in'},
+  {w:'knowledge of',s:'expertise in / mastery of'},
+];
+const TS=['built','launched','delivered','led','designed','automated','reduced','improved','increased','achieved','deployed','optimized','engineered','developed','created','established','generated','drove','transformed','accelerated'];
+const SECS={'Contact Info':/(email|@|phone|linkedin|github)/i,'Summary':/(summary|profile|objective)/i,'Skills':/(skills|technologies|competencies)/i,'Experience':/(experience|employment|work)/i,'Projects':/(projects)/i,'Education':/(education|qualification)/i,'Certifications':/(certifications?|certificates?)/i};
+const SICO={'Contact Info':'📞','Summary':'🧠','Skills':'🛠️','Experience':'💼','Projects':'🚀','Education':'🎓','Certifications':'🏅'};
+const IVBS=['achieved','automated','built','created','delivered','designed','developed','drove','enhanced','established','executed','generated','improved','increased','launched','led','managed','optimized','reduced','resolved','streamlined','transformed','deployed','migrated','analyzed','accelerated','boosted'];
+const GKWS=['python','javascript','java','sql','react','node','aws','azure','docker','kubernetes','leadership','automation','api','cloud','linux','windows','security','power bi','git','powershell','intune','sccm','active directory'];
+
+// ── TABS ──
+function sw(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('panel-'+id).classList.add('on');
+  btn.classList.add('on');
+}
+
+// ── CHAR COUNTERS ──
+['score','jd-r','jd-j','bench','tone','li','rewrite'].forEach(id=>{
+  const el=document.getElementById('t-'+id);
+  if(el)el.addEventListener('input',()=>{
+    const c=document.getElementById('cc-'+id);
+    if(c)c.textContent=el.value.length.toLocaleString()+' characters';
+  });
+});
+
+// ── SAMPLE LOADER ──
+function ls(which){
+  const m={'score':'t-score','jd-r':'t-jd-r','bench':'t-bench','tone':'t-tone','li':'t-li'};
+  const cm={'score':'cc-score','jd-r':'cc-jd-r','bench':'cc-bench','tone':'cc-tone','li':'cc-li'};
+  if(which==='rewrite'){document.getElementById('t-rewrite').value=SR;document.getElementById('cc-rewrite').textContent=SR.length+' characters';return;}
+  if(which==='jd-j'){
+    document.getElementById('t-jd-j').value=JD_SAMPLE;
+    document.getElementById('cc-jd-j').textContent=JD_SAMPLE.length+' characters';
+    return;
+  }
+  const el=document.getElementById(m[which]);
+  const cc=document.getElementById(cm[which]);
+  if(el){el.value=SR;if(cc)cc.textContent=SR.length+' characters';}
+}
+
+// ── CORE ANALYSIS ──
+function ca(t){
+  const lo=t.toLowerCase(),lines=t.split('\n').map(l=>l.trim()).filter(Boolean);
+  const wc=(lo.match(/\b\w+\b/g)||[]).length;
+  const secs={};for(const[k,p]of Object.entries(SECS))secs[k]=p.test(t);
+  const sf=Object.values(secs).filter(Boolean).length;
+  const ss=Math.round(sf/Object.keys(secs).length*100);
+  const ct=/(email|@)/i.test(t)&&/(linkedin|github|phone)/i.test(t)?100:/(email|@|linkedin)/i.test(t)?70:35;
+  const kws=GKWS.filter(k=>lo.includes(k));
+  const ksc=cl(kws.length*7+22,0,100);
+  const vbs=[...new Set(IVBS.filter(v=>new RegExp(`\\b${v}\\b`,'i').test(t)))];
+  const vsc=cl(vbs.length*12+10,0,100);
+  const al=lines.filter(l=>/(\d+%|\d+\+|\$\d+|₹\d+|\d+ (hours?|users?|clients?|endpoints?|weeks?|months?))/i.test(l));
+  const asc=cl(al.length*20+10,0,100);
+  const avgL=wc/Math.max(lines.length,1);
+  const rd=cl(85-(wc<180?15:0)-(wc>900?18:0)-(avgL>20?15:0),35,100);
+  const len=wc>=250&&wc<=700?95:wc>=180&&wc<=850?80:50;
+  const ats=Math.round(ss*.35+ct*.15+len*.2+rd*.3);
+  const ov=cl(Math.round(ats*.3+ksc*.2+vsc*.15+asc*.2+ss*.1+rd*.05),12,99);
+  return{ov,ats,ksc,vsc,asc,ss,secs,kws,vbs,al,lines,wc};
+}
+
+function xn(lines){
+  if(!lines.length)return'Candidate';
+  const f=lines[0].replace(/[^a-zA-Z\s.'-]/g,'').trim();
+  if(f&&f.split(' ').length<=4&&!/summary|skills|experience|education/i.test(f))return f;
+  return'Candidate';
+}
+
+function gr(s){if(s>=90)return'A+';if(s>=85)return'A';if(s>=80)return'B+';if(s>=75)return'B';if(s>=68)return'C+';if(s>=60)return'C';return'D';}
+function gc(s){return s>=80?'#00d4aa':s>=65?'#ffc832':'#ff6060'}
+function cl(n,a,b){return Math.max(a,Math.min(b,n))}
+function cp2(s){return s.replace(/\b\w/g,c=>c.toUpperCase())}
+function ec(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// ── RESUME SCORE ──
+function rScore(e){
+  const t=document.getElementById('t-score').value.trim();
+  if(t.length<80){alert('Please paste a complete resume.');return;}
+  const btn=e.target;btn.disabled=true;btn.textContent='Analyzing...';
+  setTimeout(()=>{
+    const d=ca(t);const name=xn(d.lines);const grade=gr(d.ov);
+    const C=2*Math.PI*55;
+    bumpCounter();
+    document.getElementById('rf').style.strokeDasharray=C;
+    document.getElementById('rf').style.strokeDashoffset=C;
+    setTimeout(()=>{document.getElementById('rf').style.strokeDashoffset=C-(d.ov/100)*C;},100);
+    document.getElementById('snum').textContent=d.ov;
+    document.getElementById('sgr').textContent=grade;
+    document.getElementById('sgr').style.color=gc(d.ov);
+    document.getElementById('sname').textContent=name;
+    const ss=[{l:'ATS Readiness',v:d.ats,c:'#7c6aff'},{l:'Keywords',v:d.ksc,c:'#00d4aa'},{l:'Impact Verbs',v:d.vsc,c:'#ffc832'},{l:'Achievements',v:d.asc,c:'#ff9a3c'},{l:'Structure',v:d.ss,c:'#62b6ff'}];
+    document.getElementById('sbars').innerHTML=ss.map(s=>`<div class="subrow"><div class="slbl">${s.l}</div><div class="strk"><div class="sbar" data-w="${s.v}%" style="background:${s.c}"></div></div><div class="sval">${s.v}</div></div>`).join('');
+    setTimeout(()=>{document.querySelectorAll('.sbar').forEach(b=>b.style.width=b.dataset.w);},120);
+    const bc={g:'bg',r:'br',y:'by'};
+    const bdgs=[];
+    if(d.ov>=85)bdgs.push({t:'Strong Resume',c:'g'});
+    if(Object.values(d.secs).filter(Boolean).length>=6)bdgs.push({t:'Well Structured',c:'g'});
+    if(d.al.length>=2)bdgs.push({t:'Results Driven',c:'g'});
+    if(d.vbs.length>=5)bdgs.push({t:'Action Oriented',c:'g'});
+    if(d.kws.length<4)bdgs.push({t:'Low Keywords',c:'y'});
+    if(!d.secs['Projects'])bdgs.push({t:'No Projects',c:'r'});
+    if(!d.secs['Summary'])bdgs.push({t:'Missing Summary',c:'r'});
+    document.getElementById('sbdgs').innerHTML=bdgs.slice(0,6).map(b=>`<span class="badge ${bc[b.c]}">${b.t}</span>`).join('');
+    document.getElementById('secList').innerHTML=Object.entries(d.secs).map(([k,v])=>`<div class="si"><div class="ico">${SICO[k]||'•'}</div><div class="lbl">${k}</div><div class="stag ${v?'tf':'tm'}">${v?'FOUND':'MISSING'}</div></div>`).join('');
+    document.getElementById('kwList').innerHTML=d.kws.length?`<div class="tc">${d.kws.map(k=>`<span class="kt">${cp2(k)}</span>`).join('')}</div>`:'<div class="em">No strong keywords detected yet.</div>';
+    const sugs=[];
+    if(!d.secs['Summary'])sugs.push({i:'🧠',t:'Add a professional summary',d:'A 2–3 line summary at the top immediately shows your value to recruiters.'});
+    if(!d.secs['Projects'])sugs.push({i:'🚀',t:'Add a projects section',d:'Projects showcase real-world skills, especially critical for technical roles.'});
+    if(d.kws.length<4)sugs.push({i:'🔑',t:'Add more role-relevant keywords',d:'Include tools, technologies, and domain terms that match your target jobs.'});
+    if(d.al.length<2)sugs.push({i:'📈',t:'Add measurable achievements',d:'Use numbers — percentages, time saved, users impacted, cost reduced, scale.'});
+    if(d.vbs.length<4)sugs.push({i:'💪',t:'Use stronger impact verbs',d:'Start bullets with: built, improved, automated, reduced, led, delivered.'});
+    if(d.wc<200)sugs.push({i:'📝',t:'Expand resume substance',d:'Too brief. Add more detail on tools used, team size, business impact, and scope.'});
+    if(sugs.length===0)sugs.push({i:'✅',t:'Great foundation',d:'Strong structure already. Tailor keywords to each specific job description.'});
+    document.getElementById('sugList').innerHTML=sugs.slice(0,6).map(s=>`<div class="sug"><div class="ico">${s.i}</div><div><strong>${s.t}</strong><span>${s.d}</span></div></div>`).join('');
+    document.getElementById('vbList').innerHTML=d.vbs.length?`<div class="tc">${d.vbs.map(v=>`<span class="vt">${cp2(v)}</span>`).join('')}</div>`:'<div class="em">No impact verbs detected. Start bullets with strong action words.</div>';
+    document.getElementById('acList').innerHTML=d.al.length?d.al.slice(0,6).map(l=>`<div class="ach"><div>📌</div><div>${ec(l)}</div></div>`).join(''):'<div class="em">No quantified achievements. Add metrics like 60%, 500 users, 12 hours saved.</div>';
+    const el=document.getElementById('res-score');el.style.display='block';el.scrollIntoView({behavior:'smooth',block:'start'});
+    btn.disabled=false;btn.textContent='⚡ Analyze Resume';
+  },700);
+}
+
+function rst(){
+  document.getElementById('res-score').style.display='none';
+  document.getElementById('t-score').value='';
+  document.getElementById('cc-score').textContent='0 characters';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── JD MATCHER ──
+function rJD(e){
+  const r=document.getElementById('t-jd-r').value.trim();
+  const j=document.getElementById('t-jd-j').value.trim();
+  if(r.length<80||j.length<50){alert('Please paste both your resume and the job description.');return;}
+  const btn=e.target;btn.disabled=true;btn.textContent='Matching...';
+  setTimeout(()=>{
+    const rlo=r.toLowerCase(),jlo=j.toLowerCase();
+    const tech=['intune','sccm','powershell','azure','aws','docker','kubernetes','python','javascript','react','node','sql','linux','windows server','active directory','rest api','ci/cd','terraform','power bi','figma','git','endpoint','automation','security'];
+    const jTech=tech.filter(t=>jlo.includes(t));
+    const jWords=[...new Set((jlo.match(/\b[a-z][a-z0-9+.#-]{3,}\b/g)||[]).filter(w=>!['with','that','this','from','have','will','your','they','their','also','been','were','into','then','when','which','must','able','other','should','would','years','experience'].includes(w)))].slice(0,25);
+    const all=[...new Set([...jTech,...jWords])];
+    const hit=all.filter(k=>rlo.includes(k));
+    const miss=all.filter(k=>!rlo.includes(k));
+    const pct=cl(all.length?Math.round((hit.length/Math.min(all.length,20))*100):0,5,97);
+    const C=2*Math.PI*40;
+    document.getElementById('mcf').style.strokeDasharray=C;
+    document.getElementById('mcf').style.strokeDashoffset=C;
+    setTimeout(()=>{document.getElementById('mcf').style.strokeDashoffset=C-(pct/100)*C;},100);
+    document.getElementById('mnum').textContent=pct+'%';
+    document.getElementById('mnum').style.color=pct>=70?'#00d4aa':pct>=50?'#ffc832':'#ff6060';
+    const title=pct>=75?'Strong Match 🎉':pct>=55?'Good Match 👍':pct>=35?'Moderate Match ⚠️':'Weak Match ❌';
+    const desc=pct>=75?`Your resume strongly aligns with this role — ${hit.length} keywords matched. Tailor your summary and apply with confidence.`
+      :pct>=55?`Decent overlap with ${hit.length} keywords matched. Add ${Math.min(miss.length,6)} more missing keywords to significantly boost your ATS score.`
+      :`You match only ${hit.length} keywords. Add ${Math.min(miss.length,8)} missing terms in context within your experience bullets before applying.`;
+    document.getElementById('mt').textContent=title;
+    document.getElementById('md').textContent=desc;
+    document.getElementById('mbars').innerHTML=`<div class="mb-wrap"><div class="mb-row"><span>Keyword Match Rate</span><span style="font-weight:700">${pct}%</span></div><div class="mb-track"><div class="mb-fill" data-w="${pct}%" style="background:${pct>=70?'#00d4aa':pct>=50?'#ffc832':'#ff6060'}"></div></div></div>`;
+    setTimeout(()=>{document.querySelectorAll('.mb-fill').forEach(b=>b.style.width=b.dataset.w);},120);
+    document.getElementById('kw-h').innerHTML=hit.length?hit.map(k=>`<span class="kh">${cp2(k)}</span>`).join(''):'<span class="em">No matching keywords found.</span>';
+    document.getElementById('kw-m').innerHTML=miss.length?miss.slice(0,15).map(k=>`<span class="km">${cp2(k)}</span>`).join(''):'<span class="em" style="color:var(--green)">No missing keywords — great match!</span>';
+    const el=document.getElementById('res-jd');el.style.display='block';el.scrollIntoView({behavior:'smooth',block:'start'});
+    btn.disabled=false;btn.textContent='🎯 Match Now';
+  },600);
+}
+
+// ── BENCHMARK ──
+function rBench(e){
+  const t=document.getElementById('t-bench').value.trim();
+  const role=document.getElementById('b-role').value;
+  if(t.length<80){alert('Please paste your resume.');return;}
+  const btn=e.target;btn.disabled=true;btn.textContent='Benchmarking...';
+  setTimeout(()=>{
+    const d=ca(t);const bd=BD[role];const s=d.ov;
+    const pct=s>=bd.top?95:s<=bd.bottom?5:Math.round(((s-bd.bottom)/(bd.top-bd.bottom))*90+5);
+    const rn={it:'IT Administrator',mdm:'MDM / Endpoint Engineer',swe:'Software Engineer',devops:'DevOps Engineer',cyber:'Cybersecurity Engineer',network:'Network Engineer',da:'Data Analyst',design:'UI/UX Designer',ba:'Business Analyst',pm:'Product Manager',pjm:'Project Manager',general:'General Professional'};
+    document.getElementById('bn-t').textContent=`You vs ${rn[role]} Industry Average`;
+    document.getElementById('bn-d').textContent=`Your resume scores ${s}/100. The average ${rn[role]} resume scores ${bd.avg}/100. Top 10% scores ${bd.top}+.`;
+    document.getElementById('bn-cards').innerHTML=[
+      {l:'Your Score',v:s,c:gc(s)},{l:'Industry Avg',v:bd.avg,c:'#8080a8'},{l:'Top 10% Score',v:bd.top,c:'#ffc832'},{l:'Your Percentile',v:pct+'th',c:'#00d4aa'}
+    ].map(c=>`<div class="bnc"><div class="bnv" style="color:${c.c}">${c.v}</div><div class="bnl">${c.l}</div></div>`).join('');
+    document.getElementById('pbf').style.width='0%';
+    setTimeout(()=>{document.getElementById('pbf').style.width=pct+'%';},120);
+    document.getElementById('pb-txt').textContent=`You are in the ${pct}th percentile of ${rn[role]} resumes`;
+    const el=document.getElementById('res-bench');el.style.display='block';el.scrollIntoView({behavior:'smooth',block:'start'});
+    btn.disabled=false;btn.textContent='📊 Benchmark Me';
+  },600);
+}
+
+// ── TONE ANALYZER ──
+function rTone(e){
+  const t=document.getElementById('t-tone').value.trim();
+  if(t.length<80){alert('Please paste your resume.');return;}
+  const btn=e.target;btn.disabled=true;btn.textContent='Analyzing...';
+  setTimeout(()=>{
+    const lo=t.toLowerCase();
+    const wf=TW.filter(w=>lo.includes(w.w));
+    const sf=TS.filter(s=>new RegExp(`\\b${s}\\b`,'i').test(t));
+    const tot=wf.length+sf.length;
+    const conf=tot===0?60:cl(Math.round((sf.length/tot)*100),20,98);
+    const cv=document.getElementById('tconf');
+    cv.textContent=conf;
+    cv.style.background=conf>=70?'linear-gradient(135deg,#00d4aa,#62b6ff)':conf>=50?'linear-gradient(135deg,#ffc832,#ff9a3c)':'linear-gradient(135deg,#ff6060,#ff9a3c)';
+    cv.style.webkitBackgroundClip='text';cv.style.webkitTextFillColor='transparent';
+    document.getElementById('tn-t').textContent=conf>=75?'Confident & Assertive Tone 💪':conf>=55?'Moderate Confidence — Room to Improve 👍':'Passive Tone Detected ⚠️';
+    document.getElementById('tn-d').textContent=conf>=75?'Your resume uses strong, active language. Recruiters will see you as decisive and results-driven.'
+      :conf>=55?`Your resume is mostly clear but has ${wf.length} passive phrase${wf.length!==1?'s':''} that weaken your impact.`
+      :`Your resume uses passive language ${wf.length} time${wf.length!==1?'s':''}. Fixing these will significantly improve how recruiters perceive you.`;
+    document.getElementById('wl').innerHTML=wf.length?wf.map(w=>`<div class="wi"><div class="wo">❌ "${w.w}"</div><div class="wa">→</div><div class="wb">✅ ${w.s}</div></div>`).join(''):'<div class="em" style="color:var(--green)">✅ No weak phrases detected — excellent tone!</div>';
+    document.getElementById('sl').innerHTML=sf.length?sf.map(s=>`<span class="vt">${cp2(s)}</span>`).join(''):'<div class="em">No strong impact verbs found. Use: built, led, delivered, optimized, automated.</div>';
+    const el=document.getElementById('res-tone');el.style.display='block';el.scrollIntoView({behavior:'smooth',block:'start'});
+    btn.disabled=false;btn.textContent='🎙️ Analyze Tone';
+  },600);
+}
+
+// ── LINKEDIN HEADLINES ──
+function rLI(e){
+  const t=document.getElementById('t-li').value.trim();
+  if(t.length<80){alert('Please paste your resume.');return;}
+  const btn=e.target;btn.disabled=true;btn.textContent='Generating...';
+  setTimeout(()=>{
+    const lo=t.toLowerCase(),lines=t.split('\n').map(l=>l.trim()).filter(Boolean);
+    let role='IT Professional';
+    if(/(sccm|intune|endpoint|systems administrator)/i.test(t))role='IT Systems Administrator & Endpoint Engineer';
+    else if(/(software engineer|developer|full.?stack)/i.test(t))role='Software Engineer';
+    else if(/(data analyst|data scientist)/i.test(t))role='Data Analyst';
+    else if(/(devops|cloud engineer|sre)/i.test(t))role='DevOps & Cloud Engineer';
+    else if(/(product manager|product owner)/i.test(t))role='Product Manager';
+    else if(/(ui|ux|designer)/i.test(t))role='UI/UX Designer';
+    const all=['Intune','SCCM','PowerShell','Azure','Python','JavaScript','AWS','Docker','FastAPI','Automation','Windows Server','Active Directory'];
+    const det=all.filter(s=>new RegExp(s,'i').test(t)).slice(0,3);
+    const sk=det.length>=2?det.slice(0,2).join(' & '):(det[0]||'Automation');
+    const sk3=det.length>=3?det[2]:'Open Source';
+    const yrm=t.match(/(\d+)\+?\s*years?/i);const yrs=yrm?yrm[1]+'+':'20+';
+    const ach=/(reduced|improved|automated|saved|increased|deployed)/i.test(t);
+    const hls=[
+      {tx:`${role} | ${yrs} Years Experience | ${sk} Expert | Building Automation Tools & Open-Source Projects`,tg:'Best',tc:'ht1'},
+      {tx:`Senior ${role} | ${sk} Specialist | Turning Complex IT Problems into Scalable Automated Solutions`,tg:'Strong',tc:'ht2'},
+      {tx:`IT Engineer & Builder | ${sk} + ${sk3} | ${ach?'Reduced Manual Effort by 60% Across 2,000+ Endpoints':'Automating Enterprise Endpoints at Scale'}`,tg:'Results',tc:'ht1'},
+      {tx:`From IT Admin to Builder: ${yrs} Years ${sk} Pro Who Ships Real Tools | GitHub Open Source Creator`,tg:'Hook',tc:'ht3'},
+      {tx:`${role} | ${det.slice(0,3).join(' · ')||sk} | ${yrs} Years of Enterprise IT Excellence | Open to Collaboration`,tg:'Pro',tc:'ht2'}
+    ];
+    const rk=['🥇','🥈','🥉','4️⃣','5️⃣'];
+    document.getElementById('hls').innerHTML=hls.map((h,i)=>`
+      <div class="hl">
+        <div class="hl-rank">${rk[i]}</div>
+        <div class="hl-text">${ec(h.tx)}</div>
+        <span class="hl-tag ${h.tc}">${h.tg}</span>
+        <button class="cp" onclick="chl(this,'${ec(h.tx)}')">Copy</button>
+      </div>`).join('');
+    const el=document.getElementById('res-li');el.style.display='block';el.scrollIntoView({behavior:'smooth',block:'start'});
+    btn.disabled=false;btn.textContent='💼 Generate Headlines';
+  },500);
+}
+
+function chl(btn,text){
+  navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1800);});
+}
+
+// ── EXPORT CARD ──
+function exp(){
+  const score=document.getElementById('snum').textContent;
+  const grade=document.getElementById('sgr').textContent;
+  const name=ec(document.getElementById('sname').textContent);
+  const bars=[...document.querySelectorAll('.subrow')].map(r=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06)"><span style="color:#8080a8;font-size:14px">${r.querySelector('.slbl').textContent}</span><strong style="font-size:14px">${r.querySelector('.sval').textContent}/100</strong></div>`).join('');
+  const w=window.open('','_blank');
+  w.document.write(`<!DOCTYPE html><html><head><title>ResumeScore AI</title><link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,700,900&display=swap" rel="stylesheet"/><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Satoshi',sans-serif;background:#07070f;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.c{width:700px;background:linear-gradient(140deg,#160d30,#0b1728 55%,#071918);border:1px solid rgba(124,106,255,.4);border-radius:22px;padding:42px;box-shadow:0 20px 60px rgba(0,0,0,.5);color:#eaeaf5}h2{font-size:11px;text-transform:uppercase;letter-spacing:2.5px;color:#8080a8;margin-bottom:12px}.big{font-size:84px;font-weight:900;background:linear-gradient(135deg,#7c6aff,#00d4aa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1;display:inline-block}.gr{font-size:26px;font-weight:900;color:#00d4aa;margin-left:12px;vertical-align:bottom;padding-bottom:7px;display:inline-block}.nm{font-size:21px;font-weight:800;margin:8px 0 26px}.ft{margin-top:22px;font-size:11px;color:#55556e;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}</style></head><body><div class="c"><h2>⚡ ResumeScore AI · Career Report Card</h2><div><span class="big">${score}</span><span class="gr">${grade}</span></div><div class="nm">${name}</div>${bars}<div class="ft">Mohammed Aslam · uniquehubs@gmail.com · linkedin.com/in/md-aslam-aa903312 · ResumeScore AI</div></div></body></html>`);
+  w.document.close();
+}
+
+
+
+// ── TIPS ──
+const TIPS=[
+  'Quantify everything — "Managed 10,000+ endpoints" is 10x stronger than "Managed many endpoints".',
+  'Your resume summary should be 40–60 words. Recruiters spend only 6 seconds on first scan.',
+  'ATS systems filter 75% of resumes before a human sees them. Keywords from the job post are critical.',
+  'Start every bullet with a strong action verb: Built, Led, Reduced, Automated, Deployed, Improved.',
+  'Remove "References available on request" — it wastes space and is assumed.',
+  'Save your resume as PDF unless the job post asks for Word format specifically.',
+  'Tailor your resume for each role — generic resumes get generic results.',
+  'Certifications near the top signal credibility fast — especially Microsoft, AWS, ITIL.',
+  'Use a consistent date format throughout — "2014 – Present" not mixed with "Jan 2014 - Now".',
+  'One page for under 5 years experience. Two pages max for senior engineers with 10+ years.',
+];
+let tipIdx=Math.floor(Math.random()*TIPS.length);
+function nextTip(){tipIdx=(tipIdx+1)%TIPS.length;const el=document.getElementById('tip-txt');if(el)el.textContent=TIPS[tipIdx];}
+(function(){const el=document.getElementById('tip-txt');if(el)el.textContent=TIPS[tipIdx];})();
+
+// ── RESUME COUNTER ──
+(function(){
+  let n=parseInt(localStorage.getItem('rsCount')||'0');
+  const el=document.getElementById('ctr-score');
+  if(el){
+    let start=0,end=n,dur=1200,step=Math.ceil(end/60)||1;
+    const tick=setInterval(()=>{start+=step;el.textContent=start;if(start>=end){el.textContent=end;clearInterval(tick);}},dur/60);
+  }
+})();
+function bumpCounter(){
+  let n=parseInt(localStorage.getItem('rsCount')||'0')+1;
+  localStorage.setItem('rsCount',n);
+  const el=document.getElementById('ctr-score');
+  if(el)el.textContent=n;
+}
+
+// ── THEME TOGGLE ──
+function toggleTheme(){
+  const b=document.body,btn=document.getElementById('themeBtn');
+  b.classList.toggle('light');
+  btn.textContent=b.classList.contains('light')?'☀️':'🌙';
+  localStorage.setItem('rsTheme',b.classList.contains('light')?'light':'dark');
+}
+(function(){
+  if(localStorage.getItem('rsTheme')==='light'){
+    document.body.classList.add('light');
+    const btn=document.getElementById('themeBtn');
+    if(btn)btn.textContent='☀️';
+  }
+})();
+
+// ── SUMMARY REWRITER ──
+const WEAK_OPENERS=['i am','i have','i worked','i helped','responsible for','worked as','with experience in'];
+const POWER_STARTERS=['Results-driven','High-impact','Strategic','Accomplished','Innovative','Award-winning','Dedicated','Detail-oriented'];
+const TONE_LABELS=[
+  {tag:'Executive',tc:'ht1',desc:'Leadership & Business Impact focus'},
+  {tag:'Technical',tc:'ht2',desc:'Skills & Engineering depth focus'},
+  {tag:'Balanced',tc:'ht3',desc:'Mix of impact, skills & personality'}
+];
+
+function rRewrite(e){
+  const t=document.getElementById('t-rewrite').value.trim();
+  if(t.length<60){alert('Please paste your resume or summary.');return;}
+  const btn=e.target;btn.disabled=true;btn.textContent='Rewriting...';
+  setTimeout(()=>{
+    const lo=t.toLowerCase(),lines=t.split('\n').map(l=>l.trim()).filter(Boolean);
+    const name=xn(lines);
+
+    // Detect role
+    let role='IT Professional',roleShort='IT Pro';
+    if(/(senior mdm|mdm engineer|endpoint|intune|sccm)/i.test(t)){role='Senior MDM Engineer';roleShort='MDM & Endpoint Engineer';}
+    else if(/(software engineer|developer|full.?stack)/i.test(t)){role='Software Engineer';roleShort='Software Engineer';}
+    else if(/(devops|cloud engineer)/i.test(t)){role='DevOps Engineer';roleShort='DevOps Engineer';}
+    else if(/(data analyst|data scientist)/i.test(t)){role='Data Analyst';roleShort='Data Analyst';}
+    else if(/(product manager)/i.test(t)){role='Product Manager';roleShort='Product Manager';}
+
+    // Detect experience
+    const yrm=t.match(/(\d+)\+?\s*years?/i);const yrs=yrm?yrm[1]+'+':'10+';
+
+    // Detect top skills
+    const allSkills=['Microsoft Intune','SCCM','PowerShell','Python','Azure','JavaScript','AWS','Docker','Kubernetes','SQL','React','Node.js','Active Directory','MDM','Automation','Endpoint Security','FastAPI','Windows Server','REST APIs','CI/CD'];
+    const foundSkills=allSkills.filter(s=>new RegExp(s.replace(/[.+]/g,'\\$&'),'i').test(t)).slice(0,4);
+    const sk3=foundSkills.slice(0,3).join(', ')||'enterprise technology';
+    const sk1=foundSkills[0]||'endpoint management';
+
+    // Detect scale
+    const scaleM=t.match(/(\d[\d,]+)\+?\s*(endpoints?|devices?|users?|servers?)/i);
+    const scale=scaleM?`${scaleM[1]}+ ${scaleM[2]}`:'large-scale enterprise environments';
+
+    // Detect achievements
+    const hasAch=/(reduced|improved|automated|saved|increased|%)/i.test(t);
+    const achLine=hasAch?'Proven track record of measurable results including significant reductions in manual effort, deployment failures, and operational overhead.':'';
+
+    // Detect certs
+    const hasCert=/(certified|certification|itil|mcsa|azure)/i.test(t);
+    const certLine=hasCert?'Holds multiple industry certifications including Microsoft, ITIL, and Azure credentials.':'';
+
+    const v1=`${POWER_STARTERS[0]} ${role} with ${yrs} years of experience designing, deploying, and managing ${scale} using ${sk3}. Recognized for driving enterprise-wide endpoint management strategies that reduce operational costs and improve compliance. ${certLine} Passionate about building automation tools and open-source projects that solve real-world IT challenges at scale.`;
+
+    const v2=`${POWER_STARTERS[2]} ${role} with deep expertise in ${sk3} and a ${yrs}-year track record of managing ${scale}. ${achLine} Skilled at building internal tools, automating workflows, and leading cloud migration initiatives. Contributor to open-source developer tooling with projects like GitDNA and ResumeScore AI.`;
+
+    const v3=`${roleShort} and builder with ${yrs} years of hands-on experience managing ${scale} using ${foundSkills.slice(0,2).join(' and ')||sk1}. I combine enterprise IT expertise with a developer mindset — automating repetitive work, building dashboards, and shipping open-source tools used by teams globally. ${certLine}`;
+
+    const versions=[v1,v2,v3];
+    const rk=['🥇','🥈','🥉'];
+    document.getElementById('rwl').innerHTML=versions.map((v,i)=>`
+      <div class="hl" style="margin-bottom:12px;flex-direction:column;align-items:flex-start;gap:10px">
+        <div style="display:flex;align-items:center;gap:10px;width:100%">
+          <div class="hl-rank">${rk[i]}</div>
+          <div style="flex:1">
+            <strong style="font-size:13px">${TONE_LABELS[i].tag} Tone</strong>
+            <span style="font-size:11px;color:var(--text2);margin-left:8px">${TONE_LABELS[i].desc}</span>
+          </div>
+          <span class="hl-tag ${TONE_LABELS[i].tc}">${TONE_LABELS[i].tag}</span>
+          <button class="cp" onclick="chl(this,'${v.replace(/'/g,"\\'")}')">Copy</button>
+        </div>
+        <div style="font-size:14px;line-height:1.7;color:var(--text);padding:0 4px">${ec(v)}</div>
+        <div style="font-size:11px;color:var(--text2)">📏 ${v.split(' ').length} words · ${v.length} characters</div>
+      </div>`).join('');
+
+    // What was improved
+    const imps=[];
+    imps.push({i:'💪',t:'Removed passive openers',d:'Replaced weak starts like "Responsible for" with strong power starters like "Results-driven" and "Strategic"'});
+    imps.push({i:'📏',t:'Optimized length',d:'Each version is 40–70 words — the ideal ATS-readable summary length that recruiters actually read fully'});
+    imps.push({i:'🔑',t:'Keywords embedded naturally',d:`Wove in ${sk3} organically so ATS systems detect them without keyword stuffing`});
+    if(hasAch)imps.push({i:'📈',t:'Achievement language preserved',d:'Kept results-oriented phrasing because quantified impact is the #1 thing that differentiates resumes'});
+    if(hasCert)imps.push({i:'🏅',t:'Certification credibility added',d:'Certifications are mentioned to signal verified expertise to both ATS and human reviewers'});
+    imps.push({i:'🎯',t:'3 distinct tones generated',d:'Executive tone for senior roles, Technical for engineering-heavy JDs, Balanced for general applications'});
+    document.getElementById('rwi').innerHTML=imps.map(s=>`<div class="sug"><div class="ico">${s.i}</div><div><strong>${s.t}</strong><span>${s.d}</span></div></div>`).join('');
+
+    const el=document.getElementById('res-rewrite');el.style.display='block';el.scrollIntoView({behavior:'smooth',block:'start'});
+    btn.disabled=false;btn.textContent='✍️ Rewrite My Summary';
+  },500);
+}
+
+</script>
+</body>
+</html>
