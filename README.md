@@ -37,6 +37,32 @@ No login. No account. No data sent anywhere. Opens and works instantly in your b
 
 ---
 
+## 📸 Screenshots
+
+### 🏠 Home
+![Home](home.png)
+
+### ⚡ Resume Score
+![Resume Score 1](resume-score-1.png)
+![Resume Score 2](resume-score-2.png)
+
+### 🎯 JD Matcher
+![JD Matcher](jd-matcher.png)
+
+### 📊 Industry Benchmark
+![Benchmark](benchmark.png)
+
+### 🎙️ Tone Analyzer
+![Tone Analyzer](tone.png)
+
+### 💼 LinkedIn Headlines
+![LinkedIn Headlines](headlines.png)
+
+### ✍️ Summary Rewriter
+![Summary Rewriter](summary-rewriter.png)
+
+---
+
 ## 🛠️ Tech Stack
 
 - Vanilla HTML / CSS / JavaScript — zero dependencies, zero build tools
@@ -47,10 +73,12 @@ No login. No account. No data sent anywhere. Opens and works instantly in your b
 ---
 
 ## 📦 Getting Started
+
+```bash
 git clone https://github.com/aslam-prog/ResumeScore-AI.git
 cd ResumeScore-AI
 open index.html
-
+```
 
 No npm install. No backend. No API keys.
 
@@ -62,7 +90,7 @@ MIT © [Mohammed Aslam](https://linkedin.com/in/md-aslam-aa903312)
 
 ---
 
-Built with ❤️ by Mohammed Aslam · [LinkedIn](https://linkedin.com/in/md-aslam-aa903312) · [GitHub](https://github.com/aslam-prog) · uniquehubs@gmail.com
+Built with ❤️ by Mohammed Aslam · [LinkedIn](https://linkedin.com/in/md-aslam-aa903312) · [GitHub](https://github.com/aslam-prog) · [uniquehubs@gmail.com](mailto:uniquehubs@gmail.com)
 
 ⭐ Star this repo if you found it useful!
 
